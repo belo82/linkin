@@ -104,8 +104,7 @@
         robots-txt (if robots-txt robots-txt "")
         robots (irobot.core/robots robots-txt)
         sitemaps (irobot.core/sitemaps robots)
-        sitemap-urls (map :loc sitemaps)
-        
+
         mem (atom (create-memory))
         pred #(crawl? %1 robots mem base-url)
         
@@ -117,8 +116,8 @@
     (start-consumer (:response-channel @mem) response-handler)
     (start-consumer (:sitemap-channel @mem) sitemap-handler)
 
-    (info "[crawl] fetching" (count sitemap-urls) "top level sitemaps")
-    (doseq [m sitemap-urls]
+    (info "[crawl] fetching" (count sitemaps) "top level sitemaps")
+    (doseq [m sitemaps]
       (if m
         (http-get (:sitemap-channel @mem) m)))
 
